@@ -7,7 +7,7 @@ app.get('/', async (c) => {
   const uuid = crypto.randomUUID();
   const random = Math.floor(Math.random() * 100) + 1;
 
-  await write(uuid, random);
+  await write(`number:${uuid}`, random);
 
   return c.json({ uuid });
 });
@@ -15,7 +15,7 @@ app.get('/', async (c) => {
 // This should only be used for debugging!!!
 app.get('/:uuid', async (c) => {
   const uuid = c.req.param('uuid');
-  const value = await read(uuid);
+  const value = await read(`number:${uuid}`);
 
   return c.json({ value });
 });

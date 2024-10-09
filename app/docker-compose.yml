@@ -9,6 +9,16 @@ services:
     environment:
       - REDIS_URL=redis://redis:6379
 
+  comparator:
+    build: ./comparator
+    restart: always
+    ports:
+      - '8001:8000'
+    volumes:
+      - ./comparator:/app
+    environment:
+      - REDIS_URL=redis://redis:6379
+
   redis:
     image: redis:7.4.1-alpine
     restart: always
