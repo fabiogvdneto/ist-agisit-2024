@@ -1,0 +1,19 @@
+services:
+  generator:
+    build: ./generator
+    restart: always
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./generator:/app
+    environment:
+      - REDIS_URL=redis://redis:6379
+
+  redis:
+    image: redis:7.4.1-alpine
+    restart: always
+    volumes: 
+      - redis:/data
+volumes:
+  redis:
+    driver: local
