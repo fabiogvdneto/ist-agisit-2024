@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Number</title>
+</head>
+<body>
+    <h1>Guess the Number!</h1>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Send</button>
+    </form>
+
+    {% if attempts is not None %}
+        <p>Attempts: {{ attempts }}</p>
+    {% endif %}
+
+    {% if result == -1 %}
+        <p>The number is greater than the value you entered.</p>
+    {% elif result == 1 %}
+        <p>The number is less than the value you entered.</p>
+    {% elif result == 0 %}
+        <p>Congratulations! You guessed the number.</p>
+    {% endif %}
+</body>
+</html>

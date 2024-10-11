@@ -19,6 +19,16 @@ services:
     environment:
       - REDIS_URL=redis://redis:6379
 
+  frontend:
+      build: ./frontend
+      ports:
+        - '8080:8080'
+      volumes:
+        - ./frontend:/app
+      environment:
+        - GENERATOR_HOST=http://generator:8000
+        - COMPARATOR_HOST=http://comparator:8000
+
   redis:
     image: redis:7.4.1-alpine
     restart: always
