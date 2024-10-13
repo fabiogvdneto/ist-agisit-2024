@@ -19,6 +19,14 @@ services:
     environment:
       - REDIS_URL=redis://redis:6379
 
+  leaderboard:
+    build: ./leaderboard
+    restart: always
+    ports:
+      - '8002:8000'
+    environment:
+      - REDIS_URL=redis://redis:6379
+
   frontend:
       build: ./frontend
       ports:
@@ -30,8 +38,10 @@ services:
         - COMPARATOR_HOST=http://comparator:8000
 
   redis:
-    image: redis:7.4.1-alpine
+    image: redis/redis-stack
     restart: always
+    ports:
+      - '8003:8001'
     volumes: 
       - redis:/data
 volumes:
