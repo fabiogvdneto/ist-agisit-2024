@@ -18,6 +18,7 @@ services:
       - ./comparator:/app
     environment:
       - REDIS_URL=redis://redis:6379
+      - LEADERBOARD_URL=http://leaderboard:8000
 
   leaderboard:
     build: ./leaderboard

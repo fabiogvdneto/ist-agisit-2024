@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
 import { write, read } from './redis.ts';
+import { onGuessed } from "./leaderboard.ts";
 
 const app = new Hono();
 
@@ -35,9 +36,11 @@ app.get('/:uuid', async (c) => {
 
   let attemptCount = await read('attempt:' + uuid) ?? 0;
   attemptCount++;
-  await write('attempt:' + uuid, attemptCount);
 
   const comparison = compare(Number(attempt), Number(value));
+  if (comparison === Comparison.Equal) await onGuessed(uuid, attemptCount);
+  else await write('attempt:' + uuid, attemptCount);
+
   return c.json({ comparison, attemptCount });
 });
 

@@ -16,3 +16,7 @@ export const write = async (key: string, value: string|number) => {
 export const read = async (key: string) => {
     return client.get(key);
 }
+
+export const del = async (key: string) => {
+    return client.del(key);
+}
