@@ -2,21 +2,25 @@
 # AGISIT Lab Cloud Native on a Cloud-Hosted Kubernetes
 
 variable "region" {
-    type = string
+  type = string
 }
 
 variable "project" {
-    type = string
+  type = string
+}
+
+variable "project_name" {
+  type = string
 }
 
 variable "workers_count" {
-    type = number
+  type = number
 }
 
 #####################################################################
 # GKE cluster Definition
-resource "google_container_cluster" "guestbook" {
-  name     = "guestbook"
+resource "google_container_cluster" "proj-cluster" {
+  name     = var.project_name
   project = var.project
   location = var.region
   initial_node_count = var.workers_count
@@ -38,7 +42,7 @@ resource "google_container_cluster" "guestbook" {
     # Check machine types for Kubernetes Nodes in https://cloud.google.com/compute/docs/general-purpose-machines
     # n1-standard-4 has 4xvCPU, 15 GB Memory
     # n1-standard-2 has 2xvCPU, 7.5 GB Memory
-    machine_type = "n1-standard-2"
+    machine_type = "n1-standard-1"
     # The OAuth 2.0 scopes requested to access Google APIs,
     # depending on the level of access needed
     # Check Scopes in https://developers.google.com/identity/protocols/oauth2/scopes
@@ -52,29 +56,27 @@ resource "google_container_cluster" "guestbook" {
       "https://www.googleapis.com/auth/compute",
     ]
   }
-
-
 }
 
 #####################################################################
 # Output for K8S
 #####################################################################
 output "client_certificate" {
-  value     = google_container_cluster.guestbook.master_auth.0.client_certificate
+  value     = google_container_cluster.proj-cluster.master_auth.0.client_certificate
   sensitive = true
 }
 
 output "client_key" {
-  value     = google_container_cluster.guestbook.master_auth.0.client_key
+  value     = google_container_cluster.proj-cluster.master_auth.0.client_key
   sensitive = true
 }
 
 output "cluster_ca_certificate" {
-  value     = google_container_cluster.guestbook.master_auth.0.cluster_ca_certificate
+  value     = google_container_cluster.proj-cluster.master_auth.0.cluster_ca_certificate
   sensitive = true
 }
 
 output "host" {
-  value     = google_container_cluster.guestbook.endpoint
+  value     = google_container_cluster.proj-cluster.endpoint
   sensitive = true
 }

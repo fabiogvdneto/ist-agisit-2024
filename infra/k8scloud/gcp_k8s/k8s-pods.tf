@@ -1,3 +1,14 @@
+variable "project" {
+  type = string
+}
+
+variable "gcr-repo" {
+  type = string
+}
+
+variable "gcr-region" {
+  type = string
+}
 # Terraform google cloud multi tier Kubernetes deployment
 # AGISIT Lab Cloud Native on a Cloud-Hosted Kubernetes
 
@@ -112,23 +123,23 @@ resource "kubernetes_deployment" "redis-follower" {
 }
 
 #################################################################
-# Defined the Frontend Pods for the GuestBook
+# Defines the Frontend Pods for the Project
 # Only 3 replicas that will be Load balanced
 resource "kubernetes_deployment" "frontend" {
   metadata {
     name = "frontend"
 
     labels = {
-      app  = "guestbook"
+      app  = "application-frontend"
       tier = "frontend"
     }
   }
 
   spec {
-    replicas = 3
+    replicas = 2
     selector {
       match_labels = {
-        app  = "guestbook"
+        app  = "application-frontend"
         tier = "frontend"
       }
     }
@@ -136,22 +147,214 @@ resource "kubernetes_deployment" "frontend" {
     template {
       metadata {
         labels = {
-          app  = "guestbook"
+          app  = "application-frontend"
           tier = "frontend"
         }
       }
       spec {
         container {
-          image = "us-docker.pkg.dev/google-samples/containers/gke/gb-frontend:v5"
-          name  = "php-redis"
+          image = "${var.gcr-region}-docker.pkg.dev/${var.project}/${var.gcr-repo}/app-frontend"
+          name  = "app-frontend"
 
           port {
             container_port = 80
           }
 
           env {
-            name  = "GET_HOSTS_FROM"
-            value = "dns"
+            name  = "GENERATOR_HOST"
+            value = "http://generator:80"
+          }
+
+          env {
+            name  = "COMPARATOR_HOST"
+            value = "http://comparator:80"
+          }
+
+          env {
+            name  = "PORT"
+            value = "80"
+          }
+
+          resources {
+            requests = {
+              cpu    = "100m"
+              memory = "100Mi"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+#################################################################
+# Defines the Pods for the Comparator
+resource "kubernetes_deployment" "comparator" {
+  metadata {
+    name = "comparator"
+
+    labels = {
+      app  = "comparator"
+      tier = "backend"
+    }
+  }
+
+  spec {
+    replicas = 2
+    selector {
+      match_labels = {
+        app  = "comparator"
+        tier = "backend"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          app  = "comparator"
+          tier = "backend"
+        }
+      }
+      spec {
+        container {
+          image = "${var.gcr-region}-docker.pkg.dev/${var.project}/${var.gcr-repo}/app-comparator"
+          name  = "app-comparator"
+
+          port {
+            container_port = 80
+          }
+
+          env {
+            name  = "REDIS_URL"
+            value = "redis://redis-leader:6379"
+          }
+
+          env {
+            name  = "LEADERBOARD_URL"
+            value = "http://leaderboard:80"
+          }
+
+          env {
+            name  = "PORT"
+            value = "80"
+          }
+
+          resources {
+            requests = {
+              cpu    = "100m"
+              memory = "100Mi"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+#################################################################
+# Defines the Pods for the Generator
+resource "kubernetes_deployment" "generator" {
+  metadata {
+    name = "generator"
+
+    labels = {
+      app  = "generator"
+      tier = "backend"
+    }
+  }
+
+  spec {
+    replicas = 2
+    selector {
+      match_labels = {
+        app  = "generator"
+        tier = "backend"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          app  = "generator"
+          tier = "backend"
+        }
+      }
+      spec {
+        container {
+          image = "${var.gcr-region}-docker.pkg.dev/${var.project}/${var.gcr-repo}/app-generator"
+          name  = "app-generator"
+
+          port {
+            container_port = 80
+          }
+
+          env {
+            name  = "REDIS_URL"
+            value = "redis://redis-leader:6379"
+          }
+
+          env {
+            name  = "PORT"
+            value = "80"
+          }
+
+          resources {
+            requests = {
+              cpu    = "100m"
+              memory = "100Mi"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+#################################################################
+# Defines the Pods for the Leaderboard
+resource "kubernetes_deployment" "leaderboard" {
+  metadata {
+    name = "leaderboard"
+
+    labels = {
+      app  = "leaderboard"
+      tier = "backend"
+    }
+  }
+
+  spec {
+    replicas = 2
+    selector {
+      match_labels = {
+        app  = "leaderboard"
+        tier = "backend"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          app  = "leaderboard"
+          tier = "backend"
+        }
+      }
+      spec {
+        container {
+          image = "${var.gcr-region}-docker.pkg.dev/${var.project}/${var.gcr-repo}/app-leaderboard"
+          name  = "app-leaderboard"
+
+          port {
+            container_port = 80
+          }
+
+          env {
+            name  = "REDIS_URL"
+            value = "redis://redis-leader:6379"
+          }
+
+          env {
+            name  = "PORT"
+            value = "80"
           }
 
           resources {

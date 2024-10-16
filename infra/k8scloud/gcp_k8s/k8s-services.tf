@@ -25,7 +25,7 @@ resource "kubernetes_service" "redis-leader" {
     }
 
     port {
-      port        = 6379
+      port = 6379
       target_port = 6379
     }
   }
@@ -50,7 +50,7 @@ resource "kubernetes_service" "redis-follower" {
     }
 
     port {
-      port        = 6379
+      port = 6379
     }
   }
 }
@@ -62,18 +62,90 @@ resource "kubernetes_service" "frontend" {
     name = "frontend"
 
     labels = {
-      app  = "guestbook"
+      app  = "application-frontend"
       tier = "frontend"
     }
   }
 
   spec {
     selector = {
-      app  = "guestbook"
+      app  = "application-frontend"
       tier = "frontend"
     }
 
     type = "LoadBalancer"
+
+    port {
+      port = 80
+    }
+  }
+}
+
+#################################################################
+# The Service for the Comparator nodes
+resource "kubernetes_service" "comparator" {
+  metadata {
+    name = "comparator"
+
+    labels = {
+      app  = "comparator"
+      tier = "backend"
+    }
+  }
+
+  spec {
+    selector = {
+      app  = "comparator"
+      tier = "backend"
+    }
+
+    port {
+      port = 80
+    }
+  }
+}
+
+#################################################################
+# The Service for the Generator nodes
+resource "kubernetes_service" "generator" {
+  metadata {
+    name = "generator"
+
+    labels = {
+      app  = "generator"
+      tier = "backend"
+    }
+  }
+
+  spec {
+    selector = {
+      app  = "generator"
+      tier = "backend"
+    }
+
+    port {
+      port = 80
+    }
+  }
+}
+
+#################################################################
+# The Service for the Leaderboard nodes
+resource "kubernetes_service" "leaderboard" {
+  metadata {
+    name = "leaderboard"
+
+    labels = {
+      app  = "leaderboard"
+      tier = "backend"
+    }
+  }
+
+  spec {
+    selector = {
+      app  = "leaderboard"
+      tier = "backend"
+    }
 
     port {
       port = 80

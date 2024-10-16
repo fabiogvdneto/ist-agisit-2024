@@ -1,4 +1,7 @@
 credentials.json
 .terraform
 .terrafrom.lock.hcl
+.terraform.tfstate.lock.info
+terraform.tfstate
+terraform.tfstate.backup
 .vagrant

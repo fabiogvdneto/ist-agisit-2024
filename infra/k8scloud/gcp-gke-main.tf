@@ -2,15 +2,27 @@
 # AGISIT Lab Cloud Native on a Cloud-Hosted Kubernetes
 
 variable "region" {
-    type = string
+  type = string
 }
 
 variable "project" {
-    type = string
+  type = string
 }
 
 variable "workers_count" {
-    type = number
+  type = number
+}
+
+variable "project_name" {
+  type = string
+}
+
+variable "gcr-repo" {
+  type = string
+}
+
+variable "gcr-region" {
+  type = string
 }
 
 # Configure Kubernetes provider with OAuth2 access token
@@ -29,6 +41,7 @@ data "google_client_config" "default" {
 module "gcp_gke" {
   source   = "./gcp_gke"
   project = var.project
+  project_name = var.project_name
   region = var.region
   workers_count = var.workers_count
 }
@@ -36,7 +49,9 @@ module "gcp_gke" {
 module "gcp_k8s" {
   source   = "./gcp_k8s"
   host     = module.gcp_gke.host
-
+  gcr-repo = var.gcr-repo
+  gcr-region = var.gcr-region
+  project = var.project
   client_certificate     = module.gcp_gke.client_certificate
   client_key             = module.gcp_gke.client_key
   cluster_ca_certificate = module.gcp_gke.cluster_ca_certificate
