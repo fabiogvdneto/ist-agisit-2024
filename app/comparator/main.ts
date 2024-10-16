@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import { write, read } from './redis.ts';
 import { onGuessed } from "./leaderboard.ts";
 
+const PORT = Deno.env.get("PORT") || "8000";
 const app = new Hono();
 
 enum Comparison {
@@ -44,4 +45,4 @@ app.get('/:uuid', async (c) => {
   return c.json({ comparison, attemptCount });
 });
 
-Deno.serve(app.fetch);
+Deno.serve({port: PORT}, app.fetch);

@@ -8,6 +8,8 @@ FROM oven/bun:1 AS base
 WORKDIR /usr/src/app
 COPY . .
 
+EXPOSE 80
+
 # run the app
 USER bun
 ENTRYPOINT [ "bun", "run", "index.ts" ]

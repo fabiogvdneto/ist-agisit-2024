@@ -1,5 +1,6 @@
 import redis from 'redis';
 
+const PORT = Bun.env.PORT || "8000";
 const REDIS_URL = Bun.env.REDIS_URL || "redis://localhost:6379";
 
 const client =
@@ -8,7 +9,7 @@ const client =
         .connect();
 
 const server = Bun.serve({
-    port: 8000,
+    port: PORT,
     async fetch(req) {
         const url = new URL(req.url);
 

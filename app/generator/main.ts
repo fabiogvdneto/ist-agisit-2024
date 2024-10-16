@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { write, read } from './redis.ts';
 
+const PORT = Deno.env.get("PORT") || "8000";
 const app = new Hono();
 
 app.get('/', async (c) => {
@@ -20,4 +21,4 @@ app.get('/:uuid', async (c) => {
   return c.json({ value });
 });
 
-Deno.serve(app.fetch);
+Deno.serve({ port: PORT }, app.fetch);

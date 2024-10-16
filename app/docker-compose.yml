@@ -3,40 +3,44 @@ services:
     build: ./generator
     restart: always
     ports:
-      - '8000:8000'
+      - '8000:80'
     volumes:
       - ./generator:/app
     environment:
       - REDIS_URL=redis://redis:6379
+      - PORT=80
 
   comparator:
     build: ./comparator
     restart: always
     ports:
-      - '8001:8000'
+      - '8001:80'
     volumes:
       - ./comparator:/app
     environment:
       - REDIS_URL=redis://redis:6379
-      - LEADERBOARD_URL=http://leaderboard:8000
+      - LEADERBOARD_URL=http://leaderboard:80
+      - PORT=80
 
   leaderboard:
     build: ./leaderboard
     restart: always
     ports:
-      - '8002:8000'
+      - '8002:80'
     environment:
       - REDIS_URL=redis://redis:6379
+      - PORT=80
 
   frontend:
       build: ./frontend
       ports:
-        - '8080:8080'
+        - '8080:80'
       volumes:
         - ./frontend:/app
       environment:
-        - GENERATOR_HOST=http://generator:8000
-        - COMPARATOR_HOST=http://comparator:8000
+        - GENERATOR_HOST=http://generator:80
+        - COMPARATOR_HOST=http://comparator:80
+        - PORT=80
 
   redis:
     image: redis/redis-stack
