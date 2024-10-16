@@ -1,43 +1,48 @@
-import redis from 'redis';
+import redis from './redis.js';
 
-const REDIS_URL = Bun.env.REDIS_URL || "redis://localhost:6379";
-
-const client =
-    await redis.createClient({ url: REDIS_URL })
-        .on('error', error => console.error('Redis client error:', error))
-        .connect();
-
-const server = Bun.serve({
+Bun.serve({
     port: 8000,
     async fetch(req) {
         const url = new URL(req.url);
 
-        if (url.pathname === "/") {
-            if (req.method === "GET") {
-                const leaderboard = await client.ZRANGE_WITHSCORES("leaderboard", 0, -1, { REV: true }) ?? [];
-                return Response.json(leaderboard, { status: 200 });
-            }
-            
-            if (req.method === "POST") {
-                const params = url.searchParams;
-                
-                const score = params.get("score");
-                if (!score) {
-                    return new Response("Score paramenter not found");
-                }
-
-                const uuid = params.get("uuid");
-                if (!uuid) {
-                    return new Response("UUID paramenter not found");
-                }
-
-                await client.ZADD("leaderboard", { score: parseInt(score), value: uuid });
-                return new Response("Success", { status: 201 });
-            }
-            
-            return new Response("Method not allowed", { status: 405 })
+        if (url.pathname !== '/') {
+            return new Response('Not Found', { status: 404 })
         }
-            
-        return new Response("Page not found", { status: 404 });
+
+        if (req.method === 'GET') {
+            return get();
+        }
+        
+        if (req.method === 'POST') {
+            const score = url.searchParams.get('score');
+            if (!score) {
+                return new Response('Score paramenter not found');
+            }
+
+            const uuid  = url.searchParams.get('uuid');
+            if (!uuid) {
+                return new Response('UUID paramenter not found');
+            }
+
+            return post(parseInt(score), uuid);
+        }
+        
+        return new Response('Method Not Allowed', { status: 405 });
     }
 });
+
+async function get() {
+    const leaderboard = await redis.getLeaderboard() ?? [];
+    return Response.json(leaderboard, { status: 200 });
+}
+
+async function post(score: number, uuid: string) {
+    const curr: number = await redis.getScore(uuid) ?? 0;
+
+    if (curr < score) {
+        await redis.setScore(uuid, score);
+        return new Response('Created', { status: 201 });
+    }
+
+    return new Response('Success', { status: 200 });
+}
