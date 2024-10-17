@@ -19,6 +19,8 @@
           vagrant
           gdk
           kubectl
+          python3
+          python311Packages.requests
         ];
      };
   });
