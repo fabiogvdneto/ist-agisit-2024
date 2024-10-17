@@ -77,6 +77,7 @@ resource "kubernetes_service" "frontend" {
 
     port {
       port = 80
+      target_port = 80
     }
   }
 }
@@ -101,6 +102,7 @@ resource "kubernetes_service" "comparator" {
 
     port {
       port = 80
+      target_port = 8000
     }
   }
 }
@@ -125,6 +127,7 @@ resource "kubernetes_service" "generator" {
 
     port {
       port = 80
+      target_port = 8000
     }
   }
 }
@@ -149,6 +152,7 @@ resource "kubernetes_service" "leaderboard" {
 
     port {
       port = 80
+      target_port = 8000
     }
   }
 }
