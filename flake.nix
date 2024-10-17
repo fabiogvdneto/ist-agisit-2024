@@ -8,7 +8,7 @@
 
   outputs = inputs: inputs.utils.lib.eachDefaultSystem (system:
     let
-      pkgs = import inputs.nixpkgs { inherit system; };
+      pkgs = import inputs.nixpkgs { inherit system; config.allowUnfree = true; };
       gdk = pkgs.google-cloud-sdk.withExtraComponents( with pkgs.google-cloud-sdk.components; [
         gke-gcloud-auth-plugin
       ]);
@@ -16,7 +16,7 @@
     {
       devShell = pkgs.mkShell {
         buildInputs = with pkgs; [
-          vagrant
+          terraform
           gdk
           kubectl
           python3
