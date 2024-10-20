@@ -153,7 +153,7 @@ resource "kubernetes_deployment" "frontend" {
       }
       spec {
         container {
-          image = "${var.gcr-region}-docker.pkg.dev/${var.project}/${var.gcr-repo}/app-frontend@sha256:b699df492cfce4223e0ba78dd6fb0b90efc686cca21af191c0f2b9cf2e5f93e8"
+          image = "${var.gcr-region}-docker.pkg.dev/${var.project}/${var.gcr-repo}/app-frontend"
           name  = "app-frontend"
 
           port {
