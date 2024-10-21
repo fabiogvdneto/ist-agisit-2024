@@ -40,6 +40,7 @@ services:
       environment:
         - GENERATOR_HOST=http://generator:80
         - COMPARATOR_HOST=http://comparator:80
+        - LEADERBOARD_HOST=http://leaderboard:80
         - PORT=80
 
   redis:

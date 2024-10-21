@@ -171,6 +171,11 @@ resource "kubernetes_deployment" "frontend" {
           }
 
           env {
+            name  = "LEADERBOARD_HOST"
+            value = "http://leaderboard:80"
+          }
+
+          env {
             name  = "PORT"
             value = "80"
           }

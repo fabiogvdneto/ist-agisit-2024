@@ -17,6 +17,8 @@
         {{ form.as_p }}
         <button type="submit">Send</button>
     </form>
+    
+    <button onclick="window.location.href='/'">Reset</button>
 
     {% if attempts is not None %}
         <p>Attempts: {{ attempts }}</p>
@@ -29,5 +31,28 @@
     {% elif result == 0 %}
         <p>Congratulations! You guessed the number.</p>
     {% endif %}
+
+
+    {% if leaderboard|length > 0 %}
+    <h2>Leaderboard</h2>
+        <table border="1" cellpadding="10">
+            <thead>
+                <tr>
+                    <th>Position</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- make an index, entry for -->
+                {% for entry in leaderboard %}
+                <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td> {{ entry.score }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
 </body>
 </html>

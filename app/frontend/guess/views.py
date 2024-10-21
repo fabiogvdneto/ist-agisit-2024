@@ -7,14 +7,15 @@ from .forms import GuessForm
 # Constants
 GENERATOR_HOST = os.getenv('GENERATOR_HOST')
 COMPARATOR_HOST = os.getenv('COMPARATOR_HOST')
+LEADERBOARD_HOST = os.getenv('LEADERBOARD_HOST')
 
 # Logger setup
 logger = logging.getLogger(__name__)
 
 # Validate environment variables
-if not GENERATOR_HOST or not COMPARATOR_HOST:
-    logger.error("Environment variables GENERATOR_HOST or COMPARATOR_HOST are not set.")
-    raise EnvironmentError("GENERATOR_HOST or COMPARATOR_HOST environment variable not set.")
+if not GENERATOR_HOST or not COMPARATOR_HOST or not LEADERBOARD_HOST:
+    logger.error("Environment variables GENERATOR_HOST or COMPARATOR_HOST or LEADERBOARD_HOST are not set.")
+    raise EnvironmentError("GENERATOR_HOST or COMPARATOR_HOST or LEADERBOARD_HOST environment variable not set.")
 
 def begin(request):
     logger.info("Starting the initialization function.")
@@ -50,7 +51,11 @@ def guess_number(request):
     form = GuessForm(request.POST or None)
     result = attempts = error = None
 
+    leaderboard_data = requests.get(LEADERBOARD_HOST, timeout=5).json()
+    leaderboard_data = sorted(leaderboard_data, key=lambda x: x['score'])[:3]
+    
     if request.method == 'POST' and form.is_valid():
+
         value = form.cleaned_data['value']
         logger.info(f"Value submitted for guessing: {value}. Making API request.")
         try:
@@ -71,6 +76,7 @@ def guess_number(request):
             logger.error(f"Error parsing API response: {e}")
     
     context = {
+        'leaderboard': leaderboard_data,
         'form': form,
         'attempts': attempts,
         'result': result,
