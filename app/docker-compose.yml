@@ -2,8 +2,6 @@ services:
   generator:
     build: ./generator
     restart: always
-    ports:
-      - '8000:80'
     volumes:
       - ./generator:/app
     environment:
@@ -13,8 +11,6 @@ services:
   comparator:
     build: ./comparator
     restart: always
-    ports:
-      - '8001:80'
     volumes:
       - ./comparator:/app
     environment:
@@ -25,8 +21,6 @@ services:
   leaderboard:
     build: ./leaderboard
     restart: always
-    ports:
-      - '8002:80'
     environment:
       - REDIS_URL=redis://redis:6379
       - PORT=80
@@ -50,6 +44,7 @@ services:
       - '8003:8001'
     volumes: 
       - redis:/data
+
 volumes:
   redis:
     driver: local
