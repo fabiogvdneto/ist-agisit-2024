@@ -1,0 +1,18 @@
+grafana:
+  sidecar:
+    datasources:
+      enabled: true
+      defaultDatasourceEnabled: true
+      isDefaultDatasource: true
+      uid: prometheus
+      url: http://prom-operator-kube-prometh-prometheus.monitoring:9090
+    dashboards:
+      enabled: true
+      label: grafana_dashboard
+      folder: /tmp/dashboards
+      provider: 
+        allowUiUpdates: true
+        foldersFromFilesStructure: true
+
+      annotations: 
+        k8s-sidecar-target-directory: "/tmp/dashboards/kubernetes"
