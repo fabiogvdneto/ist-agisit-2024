@@ -1,4 +1,4 @@
-import redis from './redis.js';
+import redis from './redis.ts';
 
 const PORT = Bun.env.PORT || "8000";
 

@@ -10,7 +10,7 @@ RUN cd /temp/ && bun install --frozen-lockfile --production
 
 FROM base AS release
 COPY --from=install /temp/node_modules node_modules
-COPY index.ts package.json ./
+COPY index.ts redis.ts package.json ./
 
 # run the app
 USER bun
