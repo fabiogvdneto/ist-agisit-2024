@@ -5,7 +5,8 @@ services:
     volumes:
       - ./generator:/app
     environment:
-      - REDIS_URL=redis://redis:6379
+      - REDIS_URL=redis://redis-leader:6379
+      - REDIS_FOLLOWER=redis://redis-follower:6379
       - PORT=80
 
   comparator:
@@ -14,7 +15,8 @@ services:
     volumes:
       - ./comparator:/app
     environment:
-      - REDIS_URL=redis://redis:6379
+      - REDIS_URL=redis://redis-leader:6379
+      - REDIS_FOLLOWER=redis://redis-follower:6379
       - LEADERBOARD_URL=http://leaderboard:80
       - PORT=80
 
@@ -22,7 +24,8 @@ services:
     build: ./leaderboard
     restart: always
     environment:
-      - REDIS_URL=redis://redis:6379
+      - REDIS_URL=redis://redis-leader:6379
+      - REDIS_FOLLOWER=redis://redis-follower:6379
       - PORT=80
 
   frontend:
@@ -37,11 +40,15 @@ services:
         - LEADERBOARD_HOST=http://leaderboard:80
         - PORT=80
 
-  redis:
-    image: redis/redis-stack
-    restart: always
-    ports:
-      - '8003:8001'
+  redis-leader:
+    image: docker.io/redis:6.0.5
+    restart: always 
+    volumes: 
+      - redis:/data
+
+  redis-follower:
+    image: gcr.io/google_samples/gb-redis-follower:v2
+    restart: always 
     volumes: 
       - redis:/data
 
