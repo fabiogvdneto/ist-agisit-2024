@@ -46,7 +46,7 @@ resource "kubernetes_deployment" "frontend" {
       }
       spec {
         container {
-          image = "${var.gcr-region}-docker.pkg.dev/${var.project}/${var.gcr-repo}/app-frontend@sha256:2b078ca2beee6d08deadc4765a20278516a1254563719178ac73b74884a35385"
+          image = "${var.gcr-region}-docker.pkg.dev/${var.project}/${var.gcr-repo}/app-frontend"
           name  = "app-frontend"
 
           port {
@@ -121,7 +121,7 @@ resource "kubernetes_deployment" "comparator" {
       }
       spec {
         container {
-          image = "${var.gcr-region}-docker.pkg.dev/${var.project}/${var.gcr-repo}/app-comparator@sha256:24afdac0c691e038e034260099eff95dac6061c3dbdd842d8b9b49e0c2a60b50"
+          image = "${var.gcr-region}-docker.pkg.dev/${var.project}/${var.gcr-repo}/app-comparator"
           name  = "app-comparator"
 
           port {
@@ -196,7 +196,7 @@ resource "kubernetes_deployment" "generator" {
       }
       spec {
         container {
-          image = "${var.gcr-region}-docker.pkg.dev/${var.project}/${var.gcr-repo}/app-generator@sha256:afa063f2ed42337337e5fcc440d0cd9a330bfb61de0aaf81ae672add207d079b"
+          image = "${var.gcr-region}-docker.pkg.dev/${var.project}/${var.gcr-repo}/app-generator"
           name  = "app-generator"
 
           port {
@@ -266,7 +266,7 @@ resource "kubernetes_deployment" "leaderboard" {
       }
       spec {
         container {
-          image = "${var.gcr-region}-docker.pkg.dev/${var.project}/${var.gcr-repo}/app-leaderboard@sha256:9508f4e720b9b6bc3b8df0ddf0b53586546febb025fa5021a47d6f764a3bead6"
+          image = "${var.gcr-region}-docker.pkg.dev/${var.project}/${var.gcr-repo}/app-leaderboard"
           name  = "app-leaderboard"
 
           port {

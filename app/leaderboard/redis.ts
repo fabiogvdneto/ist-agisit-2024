@@ -3,12 +3,12 @@ import redis from "redis";
 const REDIS_URL = process.env.REDIS_URL || "redis://localhost:6379";
 const REDIS_FOLLOWER = process.env.REDIS_FOLLOWER || "redis://localhost:6379";
 
-const leader = await redis.createClient({ url: REDIS_URL })
-    .on('error', error => console.error("Redis client error:", error))
+const leader = await redis
+    .createClient({ url: REDIS_URL })
     .connect();
 
-const follower = await redis.createClient({ url: REDIS_FOLLOWER })
-    .on('error', error => console.error("Redis follower error:", error))
+const follower = await redis
+    .createClient({ url: REDIS_FOLLOWER })
     .connect();
 
 export default {
