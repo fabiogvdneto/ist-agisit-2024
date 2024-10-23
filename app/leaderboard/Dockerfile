@@ -15,4 +15,4 @@ COPY index.ts redis.ts package.json ./
 # run the app
 USER bun
 EXPOSE 80/tcp
-ENTRYPOINT [ "bun", "run", "index.ts" ]
+CMD [ "bun", "run", "index.ts" ]

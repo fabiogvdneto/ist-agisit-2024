@@ -38,10 +38,8 @@ services:
         - PORT=80
 
   redis:
-    image: redis/redis-stack
+    image: redis:7.4.1
     restart: always
-    ports:
-      - '8003:8001'
     volumes: 
       - redis:/data
 
