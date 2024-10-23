@@ -15,7 +15,7 @@ resource "helm_release" "kube-prometheus" {
 
   depends_on = [ 
     kubernetes_config_map.grafana-dashboards-app
-   ]
+  ]
 }
 
 resource "kubernetes_config_map" "grafana-dashboards-app" {

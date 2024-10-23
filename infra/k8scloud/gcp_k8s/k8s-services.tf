@@ -53,6 +53,10 @@ resource "kubernetes_service" "redis-follower" {
       port = 6379
     }
   }
+
+  depends_on = [ 
+    kubernetes_service.redis-leader
+  ]
 }
 
 #################################################################
@@ -80,6 +84,12 @@ resource "kubernetes_service" "frontend" {
       target_port = 80
     }
   }
+
+  depends_on = [ 
+    kubernetes_service.comparator,
+    kubernetes_service.generator,
+    kubernetes_service.leaderboard
+  ]
 }
 
 #################################################################
@@ -105,6 +115,11 @@ resource "kubernetes_service" "comparator" {
       target_port = 8000
     }
   }
+
+  depends_on = [ 
+    kubernetes_service.redis-leader,
+    kubernetes_service.redis-follower
+  ]
 }
 
 #################################################################
@@ -130,6 +145,11 @@ resource "kubernetes_service" "generator" {
       target_port = 8000
     }
   }
+
+  depends_on = [ 
+    kubernetes_service.redis-leader,
+    kubernetes_service.redis-follower
+  ]
 }
 
 #################################################################
@@ -155,4 +175,9 @@ resource "kubernetes_service" "leaderboard" {
       target_port = 8000
     }
   }
+
+  depends_on = [ 
+    kubernetes_service.redis-leader,
+    kubernetes_service.redis-follower
+  ]
 }
