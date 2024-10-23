@@ -42,7 +42,7 @@ resource "google_container_cluster" "proj-cluster" {
     # Check machine types for Kubernetes Nodes in https://cloud.google.com/compute/docs/general-purpose-machines
     # n1-standard-4 has 4xvCPU, 15 GB Memory
     # n1-standard-2 has 2xvCPU, 7.5 GB Memory
-    machine_type = "n1-standard-1"
+    machine_type = "n1-standard-2"
     # The OAuth 2.0 scopes requested to access Google APIs,
     # depending on the level of access needed
     # Check Scopes in https://developers.google.com/identity/protocols/oauth2/scopes

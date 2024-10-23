@@ -14,7 +14,7 @@ gcr-repo="number-guesser"
 gcr-region="europe-central2"
 
 # Define the default number of Nodes for the cluster
-workers_count = "5"
+workers_count = "4"
 
 # Define the Region/Zone
 # Regions list is found at:
