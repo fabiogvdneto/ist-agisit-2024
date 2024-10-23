@@ -21,7 +21,6 @@ const compare = (a: number, b: number) => {
   }
 }
 
-// This should only be used for debugging!!!
 app.get('/:uuid', async (c) => {
   const uuid = c.req.param('uuid');
   const attempt = c.req.query('attempt');
