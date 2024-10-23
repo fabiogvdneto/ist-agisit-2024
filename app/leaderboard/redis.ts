@@ -8,7 +8,7 @@ const client = await redis.createClient({ url })
 
 export default {
     getLeaderboard: () => {
-        return client.ZRANGE_WITHSCORES("leaderboard", 0, -1, { REV: true }) ?? [];
+        return client.ZRANGE_WITHSCORES("leaderboard", 0, -1, { REV: true });
     },
 
     getScore: (uuid: string) => {

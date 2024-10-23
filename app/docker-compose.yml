@@ -41,17 +41,19 @@ services:
         - PORT=80
 
   redis-leader:
-    image: docker.io/redis:6.0.5
+    image: redis:7.4.1
     restart: always 
     volumes: 
-      - redis:/data
+      - redis-leader:/data
 
   redis-follower:
     image: gcr.io/google_samples/gb-redis-follower:v2
     restart: always 
     volumes: 
-      - redis:/data
+      - redis-follower:/data
 
 volumes:
-  redis:
+  redis-leader:
+    driver: local
+  redis-follower:
     driver: local

@@ -50,7 +50,7 @@ resource "kubernetes_deployment" "redis-leader" {
       }
       spec {
         container {
-          image = "docker.io/redis:6.0.5"
+          image = "docker.io/redis:7.4.1"
           name  = "leader"
 
           port {
