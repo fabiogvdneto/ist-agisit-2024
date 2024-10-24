@@ -24,7 +24,6 @@
       {
         "datasource": {
           "type": "prometheus",
-          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -105,7 +104,6 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "prometheus"
             },
             "disableTextWrap": false,
             "editorMode": "builder",
@@ -135,7 +133,7 @@
     "timepicker": {},
     "timezone": "browser",
     "title": "My custom",
-    "uid": "de1vl86ad260we",
+    "uid": "prometheus",
     "version": 2,
     "weekStart": ""
   }
