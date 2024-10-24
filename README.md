@@ -1,93 +1,173 @@
-# agisit24-g31
+<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
+<a id="readme-top"></a>
+<!--
+*** Thanks for checking out the Best-README-Template. If you have a suggestion
+*** that would make this better, please fork the repo and create a pull request
+*** or simply open an issue with the tag "enhancement".
+*** Don't forget to give the project a star!
+*** Thanks again! Now go create something AMAZING! :D
+-->
+
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://gitlab.rnl.tecnico.ulisboa.pt/agisit/agisit24-g31">
+    <img src="docs/logo.png" alt="Logo" width="80" height="80">
+  </a>
+
+  <h3 align="center">Number Guesser</h3>
+
+  <p align="center">
+    An awesome Kubernetes game for guessing a number
+    <br />
+    <br />
+  </p>
+</div>
 
 
 
-## Getting started
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#deploying-to-gke">Deploying to GKE</a></li>
+        <ul>
+          <li><a href="#gcr">Google Artifact Registry</a></li>
+          <li><a href="#terraform">Terraform</a></li>
+        </ul>
+      </ul>
+    </li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
+</details>
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
 
-## Add your files
+<!-- ABOUT THE PROJECT -->
+## About The Project
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+![Product Name Screen Shot][product-screenshot]
 
-```
-cd existing_repo
-git remote add origin https://gitlab.rnl.tecnico.ulisboa.pt/agisit/agisit24-g31.git
-git branch -M master
-git push -uf origin master
-```
+Number Guesser is a number guessing game, where the system generates a random number that remains hidden from the player.
 
-## Integrate with your tools
+For simplicity, the game only generates numbers in the interval 1 to 100. Then, the player must place guesses, and the system will provide feedback in the form of "lower", "higher", or "correct". The less guesses a player needs to find the number, the better. There is a leaderboard on how many guesses it took the players to guess some numbers. A strategy for better results could be to employ binary search.
 
-- [ ] [Set up project integrations](https://gitlab.rnl.tecnico.ulisboa.pt/agisit/agisit24-g31/-/settings/integrations)
+A demonstration of the system working is available on [YouTube](https://youtu.be/123456)
 
-## Collaborate with your team
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
 
-## Test and Deploy
 
-Use the built-in continuous integration in GitLab.
+### Built With
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+The web application was built with the following technologies.
 
-***
+* [![Bun][Bun-img]][Bun-url]
+* [![Deno][Deno-img]][Deno-url] with [![Hono][Hono-img]][Hono-url]
+* [![Python][Python-img]][Python-url] with [![Django][Django-img]][Django-url]
+* [![Redis][Redis-img]][Redis-url]
 
-# Editing this README
+And the infrastructure was built on
+* [![Docker][Docker-img]][Docker-url]
+* [![Google Cloud][GCloud-img]][GCloud-url]
+* [![Grafana][Grafana-img]][Grafana-url]
+* [![Helm][Helm-img]][Helm-url]
+* [![Kubernetes][Kubernetes-img]][Kubernetes-url]
+* [![Prometheus][Prometheus-img]][Prometheus-url]
+* [![Terraform][Terraform-img]][Terraform-url]
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+![Architecture][architecture-img]
 
-## Suggestions for a good README
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
 
-## Name
-Choose a self-explaining name for your project.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+<!-- GETTING STARTED -->
+## Getting Started
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+This is an example of how you may give instructions on setting up your project locally.
+To get a local copy up and running follow these simple example steps.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+Each microservice has a Dockerfile that can be used to run the microservice. App-level docker compose is also available to run the application locally.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+### Deploying to GKE
+1. Get a [Service Account](https://console.cloud.google.com/iam-admin/serviceaccounts) from Google Cloud. It needs certain permissions for building the cluster. To be safe from further troubleshooting, you can make the service account and **Owner**.
+2. Put the _credentials_ in [infra/k8scloud/credentials.json](infra/k8scloud/credentials.json)
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+#### GCR
+The project uses [Google Artifact Registry](https://gcr.io), so you have to authenticate on Docker and push the Docker images to it. You can read the documentation [here](https://cloud.google.com/artifact-registry/docs/docker/authentication#json-key).
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+1. Authenticate docker. Considering _location_ being **europe-central2**: `cat credentials.json | docker login -u _json_key --password-stdin \
+https://europe-central2-docker.pkg.dev`
+2. Build the images with `docker compose build`
+3. Use the [app/push-all.sh](app/push-all.sh) to help you tag and push the Docker images
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+    You can use [app/push.sh](app/push.sh) to push a single image. It takes as argument the image name.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+#### Terraform
+Go to [infra/k8scloud](infra/k8scloud/).
+1. Change [terraform variables](infra/k8scloud/terraform.tfvars) if needed
+2. Run `terraform init`. 
+    
+    You can use the Vagrantfile (`vagrant up` then `vragrant ssh`) to start a VM with the necessary dependencies or `nix develop` if on nixos
+3. Run `terraform apply` and wait for the cluster to create. Generally takes about 8 minutes
+4. Setup kubectl to use the created cluster by running [infra/k8scloud/scripts/connect.kubectl.sh](infra/k8scloud/scripts/connect.kubectl.sh)
+5. Get the _frontend_ service IP: `kubectl get services`. By placing it on your browser you can now use the application.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+If you wish to connect to Grafana to see the dashboards, you have to portforward.
+This can be achieved by running the [infra/k8scloud/scripts/grafana.sh](infra/k8scloud/scripts/grafana.sh) script. The same applies to Prometheus.
 
-## License
-For open source projects, say how it is licensed.
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+<!-- CONTACT -->
+## Contact
+
+- Fábio Neto - ist1104126 - fabiogvdneto@tecnico.ulisboa.pt
+- Lucas Pinto - ist1110813 - lucas.f.pinto@tecnico.ulisboa.pt
+- João Ferreira - ist1110954 - joao.filipe.ferreira@tecnico.ulisboa.pt
+
+Project Link: [Gitlab@RNL/agisit/agisit24-g31](https://gitlab.rnl.tecnico.ulisboa.pt/agisit/agisit24-g31)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[product-screenshot]: docs/app-screenshot.png
+[architecture-img]: docs/architecture.png
+[Bun-img]: https://img.shields.io/badge/Bun-000?logo=bun&logoColor=fff
+[Bun-url]: https://bun.sh
+[Deno-img]: https://img.shields.io/badge/Deno-000?logo=deno&logoColor=fff
+[Deno-url]: https://deno.com
+[Django-img]: https://img.shields.io/badge/Django-%23092E20.svg?logo=django&logoColor=fff
+[Django-url]: https://www.djangoproject.com/
+[Kubernetes-img]: https://img.shields.io/badge/Kubernetes-326CE5?logo=kubernetes&logoColor=fff
+[Kubernetes-url]: https://kubernetes.io/
+[GCloud-img]: https://img.shields.io/badge/Google%20Cloud-%234285F4.svg?logo=google-cloud&logoColor=white
+[GCloud-url]: https://cloud.google.com
+[Redis-img]: https://img.shields.io/badge/Redis-%23DD0031.svg?logo=redis&logoColor=white
+[Redis-url]: https://redis.io/
+[Helm-img]: https://img.shields.io/badge/Helm-0F1689?logo=helm&logoColor=fff
+[Helm-url]: https://helm.sh/
+[Hono-img]: https://img.shields.io/badge/Hono-E36002?logo=hono&logoColor=fff
+[Hono-url]: https://hono.dev/
+[Python-img]: https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=fff
+[Python-url]: https://www.python.org/
+[Prometheus-img]: https://img.shields.io/badge/Prometheus-E6522C?logo=Prometheus&logoColor=white
+[Prometheus-url]: https://prometheus.io/
+[Grafana-img]: https://img.shields.io/badge/grafana-%23F46800.svg?logo=Grafana&logoColor=white
+[Grafana-url]: https://grafana.com/
+[Docker-img]: https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=fff
+[Docker-url]: https://www.docker.com/
+[Terraform-img]: https://img.shields.io/badge/Terraform-623CE4?logo=terraform&logoColor=white
+[Terraform-url]: https://www.terraform.io/
