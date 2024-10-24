@@ -1,7 +1,8 @@
 {
   "imports": {
     "hono": "jsr:@hono/hono@^4.6.3",
-    "redis": "npm:redis@^4.7.0"
+    "redis": "npm:redis@^4.7.0",
+    "prom-client": "npm:prom-client@^14.0.0"
   },
   "tasks": {
     "start": "deno run --allow-net --allow-env main.ts"

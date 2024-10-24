@@ -60,3 +60,29 @@ services:
       interval: 1s
       timeout: 3s
       retries: 15
+
+  prometheus:
+    image: prom/prometheus:latest
+    restart: always
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - '9090:9090'
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    depends_on:
+      - generator
+      - comparator
+      - leaderboard
+      - frontend
+      - redis-leader
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    volumes:
+      - .grafana//dashboards:/etc/grafana/provisioning/dashboards/
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
