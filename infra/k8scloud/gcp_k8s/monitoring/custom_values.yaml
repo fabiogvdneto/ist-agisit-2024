@@ -16,3 +16,19 @@ grafana:
 
       annotations: 
         k8s-sidecar-target-directory: "/tmp/dashboards/kubernetes"
+
+prometheus:
+  image: prom/prometheus:latest
+  restart: always
+  volumes:
+    - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+  ports:
+    - '9090:9090'
+  command:
+    - '--config.file=/etc/prometheus/prometheus.yml'
+  depends_on:
+  - generator
+  - comparator
+  - leaderboard
+  - frontend
+  - redis-leader
