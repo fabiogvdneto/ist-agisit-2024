@@ -4,55 +4,270 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guess the Number</title>
-</head>
+
+    <style>
+        /* Base styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .container, .leaderboard-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            margin-bottom: 20px; /* Add spacing between containers */
+        }
+
+        h1 {
+            color: #0077cc;
+            margin-bottom: 20px;
+        }
+
+        p.error {
+            color: red;
+            font-weight: bold;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        form input, form button {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            width: calc(100% - 22px); /* adjust for padding */
+            box-sizing: border-box;
+        }
+
+        form button {
+            background-color: #0077cc;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        form button:hover {
+            background-color: #005fa3;
+        }
+
+        button.reset-btn {
+            background-color: #ff6666;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button.reset-btn:hover {
+            background-color: #cc5252;
+        }
+
+        /* Attempts counter styling */
+        .attempts-box {
+            background-color: #f0f0f5;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+            display: inline-block;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Result messages styling */
+        .result-message {
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 16px;
+            text-align: left;
+        }
+
+        .result-message.success {
+            background-color: #e0f8e0;
+            border: 1px solid #28a745;
+            color: #28a745;
+        }
+
+        .result-message.failure {
+            background-color: #f8d7da;
+            border: 1px solid #dc3545;
+            color: #dc3545;
+        }
+
+        .result-message.info {
+            background-color: #e7f3ff;
+            border: 1px solid #007bff;
+            color: #007bff;
+        }
+
+        .result-message i {
+            margin-right: 10px;
+        }
+
+        /* Leaderboard table */
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #0077cc;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Media queries for responsiveness */
+        @media (max-width: 600px) {
+            .container, .leaderboard-container {
+                padding: 10px;
+                width: 90%; /* make containers more compact on smaller screens */
+            }
+
+            form input, form button {
+                width: calc(100% - 20px); /* adjust for smaller screens */
+            }
+        }
+    </style>
+
+    {% if result == 0 %}
+    <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
+    <script>
+        function startConfetti() {
+            const duration = 15 * 1000,
+                animationEnd = Date.now() + duration,
+                defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                const particleCount = 50 * (timeLeft / duration);
+
+                // since particles fall down, start a bit higher than random
+                confetti(
+                    Object.assign({}, defaults, {
+                    particleCount,
+                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+                    })
+                );
+                confetti(
+                    Object.assign({}, defaults, {
+                    particleCount,
+                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+                    })
+                );
+            }, 250);
+        }
+    </script>
+    {% endif %}
+    </head>
 <body>
-    <h1>Guess the Number!</h1>
+    <div class="wrapper">
+        <div class="container">
+            <h1>Guess the Number!</h1>
 
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Send</button>
-    </form>
-    
-    <button onclick="window.location.href='/'">Reset</button>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Send</button>
+            </form>
+            
+            <button class="reset-btn" onclick="window.location.href='/'">Reset</button>
 
-    {% if attempts is not None %}
-        <p>Attempts: {{ attempts }}</p>
-    {% endif %}
+            {% if attempts is not None %}
+                <p class="attempts-box">Attempts: {{ attempts }}</p>
+            {% endif %}
 
-    {% if result == -1 %}
-        <p>The number is greater than the value you entered.</p>
-    {% elif result == 1 %}
-        <p>The number is less than the value you entered.</p>
-    {% elif result == 0 %}
-        <p>Congratulations! You guessed the number.</p>
-    {% endif %}
+            {% if result == -1 %}
+                <p class="result-message failure">☝️ The number is greater than the value you entered.</p>
+            {% elif result == 1 %}
+                <p class="result-message failure">👇 The number is less than the value you entered.</p>
+            {% elif result == 0 %}
+                <p class="result-message success">🎉 Congratulations! You guessed the number.</p>
+                <script>
+                    startConfetti();
+                </script>
+            {% endif %}
+        </div>
 
-
-    {% if leaderboard|length > 0 %}
-    <h2>Leaderboard</h2>
-        <table border="1" cellpadding="10">
-            <thead>
-                <tr>
-                    <th>Position</th>
-                    <th>Score</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- make an index, entry for -->
-                {% for entry in leaderboard %}
-                <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td> {{ entry.score }}</td>
+        {% if leaderboard|length > 0 %}
+        <div class="leaderboard-container">
+            <h2>Leaderboard</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Position</th>
+                        <th>Score</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% endif %}
-
+                </thead>
+                <tbody>
+                    <!-- make an index, entry for -->
+                    {% for entry in leaderboard %}
+                    <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td> {{ entry.score }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>  
+        {% endif %}
+    </div>
 </body>
 </html>

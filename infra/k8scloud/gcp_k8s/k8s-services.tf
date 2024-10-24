@@ -2,64 +2,6 @@
 # AGISIT Lab Cloud Native on a Cloud-Hosted Kubernetes
 
 #################################################################
-# Definition of the Services
-#################################################################
-
-# The Service for the REDIS Leader Pods
-resource "kubernetes_service" "redis-leader" {
-  metadata {
-    name = "redis-leader"
-
-    labels = {
-      app  = "redis"
-      role = "leader"
-      tier = "backend"
-    }
-  }
-
-  spec {
-    selector = {
-      app  = "redis"
-      role = "leader"
-      tier = "backend"
-    }
-
-    port {
-      port = 6379
-      target_port = 6379
-    }
-  }
-}
-# The Service for the REDIS Follower Pods
-resource "kubernetes_service" "redis-follower" {
-  metadata {
-    name = "redis-follower"
-
-    labels = {
-      app  = "redis"
-      role = "follower"
-      tier = "backend"
-    }
-  }
-
-  spec {
-    selector = {
-      app  = "redis"
-      role = "follower"
-      tier = "backend"
-    }
-
-    port {
-      port = 6379
-    }
-  }
-
-  depends_on = [ 
-    kubernetes_service.redis-leader
-  ]
-}
-
-#################################################################
 # The Service for the Frontend Load Balancer Ingress
 resource "kubernetes_service" "frontend" {
   metadata {
@@ -117,8 +59,7 @@ resource "kubernetes_service" "comparator" {
   }
 
   depends_on = [ 
-    kubernetes_service.redis-leader,
-    kubernetes_service.redis-follower
+    kubernetes_service.redis
   ]
 }
 
@@ -147,8 +88,7 @@ resource "kubernetes_service" "generator" {
   }
 
   depends_on = [ 
-    kubernetes_service.redis-leader,
-    kubernetes_service.redis-follower
+    kubernetes_service.redis
   ]
 }
 
@@ -177,7 +117,6 @@ resource "kubernetes_service" "leaderboard" {
   }
 
   depends_on = [ 
-    kubernetes_service.redis-leader,
-    kubernetes_service.redis-follower
+    kubernetes_service.redis
   ]
 }
