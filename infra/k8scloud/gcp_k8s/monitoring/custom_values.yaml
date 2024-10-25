@@ -18,17 +18,28 @@ grafana:
         k8s-sidecar-target-directory: "/tmp/dashboards/kubernetes"
 
 prometheus:
-  image: prom/prometheus:latest
-  restart: always
-  volumes:
-    - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-  ports:
-    - '9090:9090'
-  command:
-    - '--config.file=/etc/prometheus/prometheus.yml'
-  depends_on:
-  - generator
-  - comparator
-  - leaderboard
-  - frontend
-  - redis-leader
+  prometheusSpec:
+    scrapeConfigNamespaceSelector:
+      matchLabels:
+        prometheus: monitoring
+    additionalScrapeConfigs:
+    - job_name: 'leaderboard'
+      metrics_path: '/metrics'
+      static_configs:
+        - targets: ['leaderboard.default:80']
+
+    - job_name: 'frontend'
+      metrics_path: '/metrics'
+      static_configs:
+        - targets: ['frontend.default:80']
+
+    - job_name: 'comparator'
+      metrics_path: '/metrics'
+      static_configs:
+        - targets: ['comparator.default:80']
+
+    - job_name: 'generator'
+      metrics_path: '/metrics'
+      static_configs:
+        - targets: ['generator.default:80']
+
