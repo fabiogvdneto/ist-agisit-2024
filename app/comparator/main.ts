@@ -18,7 +18,7 @@ const requestCounter = new client.Counter({
 const attemptCounter = new client.Counter({
   name: 'comparator_total_attempts',
   help: 'Total number of attempts made by users',
-  labelNames: ['uuid'],
+  labelNames: ['compare'],
 });
 
 const successCounter = new client.Counter({
@@ -27,10 +27,17 @@ const successCounter = new client.Counter({
   labelNames: ['uuid'],
 });
 
+const requestDurationGauge = new client.Gauge({
+  name: 'comparator_request_duration_ms',
+  help: 'Duration of requests in milliseconds',
+  labelNames: ['route', 'method'],
+});
+
 // Register the metrics
 register.registerMetric(requestCounter);
 register.registerMetric(attemptCounter);
 register.registerMetric(successCounter);
+register.registerMetric(requestDurationGauge);
 
 enum Comparison {
   Less = -1,
@@ -56,7 +63,6 @@ app.get('/metrics', async (c) => {
   });
 });
 
-
 app.get('/:uuid', async (c) => {
   const uuid = c.req.param('uuid');
   const attempt = c.req.query('attempt');
@@ -64,6 +70,8 @@ app.get('/:uuid', async (c) => {
   if (!attempt) {
     return c.json({ error: 'Attempt not provided' });
   }
+
+  const startTime = Date.now();
 
   // Increment request counter for this route and method
   requestCounter.inc({ route: '/:uuid', method: 'GET' });
@@ -76,9 +84,9 @@ app.get('/:uuid', async (c) => {
   let attemptCount = await read('attempt:' + uuid) ?? 0;
   attemptCount++;
 
-  attemptCounter.inc({ uuid });
-
   const comparison = compare(Number(attempt), Number(value));
+
+  attemptCounter.inc({ compare: comparison });
 
   if (comparison === Comparison.Equal) {
     await onGuessed(uuid, attemptCount);
@@ -87,7 +95,10 @@ app.get('/:uuid', async (c) => {
     await write('attempt:' + uuid, attemptCount);
   }
 
-  return c.json({ comparison, attemptCount });
+  const elapsedTime = Date.now() - startTime;
+  requestDurationGauge.set({ route: '/:uuid', method: 'GET' }, elapsedTime);
+
+  return c.json({ comparison, attemptCount});
 });
 
 Deno.serve({port: PORT}, app.fetch);

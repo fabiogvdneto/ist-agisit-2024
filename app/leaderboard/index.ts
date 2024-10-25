@@ -17,15 +17,15 @@ const postScoreCounter = new client.Counter({
     help: 'Number of POST requests to update a user score',
 });
 
-const requestDurationHistogram = new client.Histogram({
-    name: 'leaderboard_request_duration_seconds',
-    help: 'Duration of leaderboard requests in seconds',
-    buckets: [0.1, 0.5, 1, 2, 5], // Time buckets in seconds
-});
+const requestDurationGauge = new client.Gauge({
+    name: 'leaderboard_request_duration_ms',
+    help: 'Duration of requests in milliseconds',
+    labelNames: ['method'],
+  });
 
 register.registerMetric(requestCounter);
 register.registerMetric(postScoreCounter);
-register.registerMetric(requestDurationHistogram);
+register.registerMetric(requestDurationGauge);
 
 
 Bun.serve({
@@ -60,10 +60,7 @@ Bun.serve({
                 return new Response('UUID paramenter not found');
             }
 
-            // Measure the duration of the POST request
-            const end = requestDurationHistogram.startTimer(); 
             const response = await post(parseInt(score), uuid);
-            end(); 
 
             requestCounter.inc({ uuid }); 
             return response;
@@ -74,18 +71,27 @@ Bun.serve({
 });
 
 async function get() {
+    const startTime = Date.now();
     const leaderboard = await redis.getLeaderboard() ?? [];
+    const elapsedTime = Date.now() - startTime;
+    requestDurationGauge.set({  method: 'GET' }, elapsedTime);
     return Response.json(leaderboard, { status: 200 });
 }
 
 async function post(score: number, uuid: string) {
+    const startTime = Date.now();
+
     const curr: number = await redis.getScore(uuid) ?? 0;
 
     if (curr < score) {
         await redis.setScore(uuid, score);
         postScoreCounter.inc(); 
+            
+        const elapsedTime = Date.now() - startTime;
+        requestDurationGauge.set({  method: 'POST' }, elapsedTime);
         return new Response('Created', { status: 201 });
     }
-
+    const elapsedTime = Date.now() - startTime;
+    requestDurationGauge.set({method: 'POST' }, elapsedTime);
     return new Response('Success', { status: 200 });
 }
