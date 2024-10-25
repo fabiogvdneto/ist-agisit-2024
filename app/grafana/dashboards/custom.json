@@ -1205,11 +1205,15 @@
       "type": "stat"
     }
   ],
-  "preload": false,
+  "refresh": "5s",
   "schemaVersion": 40,
   "tags": [],
   "templating": {
     "list": []
+  },
+  "time": {
+    "from": "now-30m",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "",
