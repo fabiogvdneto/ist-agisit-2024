@@ -34,5 +34,6 @@ resource "kubernetes_config_map" "grafana-dashboards-app" {
 
   data = {
     "all.json" = file("${path.module}/monitoring/dashboards/all.json"),
+    "custom.json" = file("${path.module}/monitoring/dashboards/custom.json"),
   }
 }
