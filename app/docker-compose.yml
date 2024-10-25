@@ -81,7 +81,8 @@ services:
     image: grafana/grafana
     container_name: grafana
     volumes:
-      - .grafana//dashboards:/etc/grafana/provisioning/dashboards/
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards/
+      - ./grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
     ports:
       - "3000:3000"
     depends_on:

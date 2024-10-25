@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from .forms import GuessForm
 from prometheus_client import Summary, Counter, generate_latest
 from django.http import HttpResponse
+import time  # Import the time module to track execution time
 
 # Constants
 GENERATOR_HOST = os.getenv('GENERATOR_HOST')
@@ -21,11 +22,17 @@ if not GENERATOR_HOST or not COMPARATOR_HOST or not LEADERBOARD_HOST:
 
 # Prometheus metrics
 REQUEST_COUNT = Counter('frontend_request_count', 'Total request count', ['view_name'])
-REQUEST_TIME = Summary('frontend_request_processing_seconds', 'Time spent processing request', ['view_name'])
+REQUEST_TIME_MS = Summary('frontend_request_processing_time_milliseconds', 'Time spent processing request in milliseconds', ['view_name'])
 ERROR_COUNT = Counter('frontend_error_count', 'Total error count', ['view_name'])
 
-@REQUEST_TIME.labels('begin').time()
+def record_time(view_name, start_time):
+    """Record elapsed time in milliseconds."""
+    elapsed_time_ms = (time.time() - start_time) * 1000  
+    REQUEST_TIME_MS.labels(view_name).observe(elapsed_time_ms)
+
+@REQUEST_TIME_MS.labels('begin').time()
 def begin(request):
+    start_time = time.time() 
     logger.info("Starting the initialization function.")
 
     try:
@@ -39,25 +46,30 @@ def begin(request):
             response_redirect = redirect('guess_number')
             response_redirect.set_cookie('uid', uid, max_age=3600, httponly=True, secure=False)
             REQUEST_COUNT.labels('begin').inc() 
+            record_time('begin', start_time) 
             return response_redirect
         else:
             logger.error("UID not found in the response from the generator host.")
             ERROR_COUNT.labels('begin').inc() 
+            record_time('begin', start_time)  
             return error_page(request)
     
     except requests.RequestException as e:
         logger.error(f"RequestException while obtaining UID: {e}")
         ERROR_COUNT.labels('begin').inc() 
+        record_time('begin', start_time)
         return error_page(request)
 
-@REQUEST_TIME.labels('guess_number').time()
+@REQUEST_TIME_MS.labels('guess_number').time()
 def guess_number(request):
+    start_time = time.time() 
     logger.info("Starting the guessing function.")
     
     uid = request.COOKIES.get('uid')
     if not uid:
         logger.warning("No UID found in cookies, redirecting to 'begin'.")
         REQUEST_COUNT.labels('guess_number').inc() 
+        record_time('guess_number', start_time)  
         return redirect('begin')
 
     logger.info(f"UID found in cookies: {uid}")
@@ -95,6 +107,7 @@ def guess_number(request):
             ERROR_COUNT.labels('guess_number').inc() 
     
     REQUEST_COUNT.labels('guess_number').inc()
+    record_time('guess_number', start_time)  
 
     context = {
         'leaderboard': leaderboard_data,
