@@ -16,3 +16,30 @@ grafana:
 
       annotations: 
         k8s-sidecar-target-directory: "/tmp/dashboards/kubernetes"
+
+prometheus:
+  prometheusSpec:
+    scrapeConfigNamespaceSelector:
+      matchLabels:
+        prometheus: monitoring
+    additionalScrapeConfigs:
+    - job_name: 'leaderboard'
+      metrics_path: '/metrics'
+      static_configs:
+        - targets: ['leaderboard.default:80']
+
+    - job_name: 'frontend'
+      metrics_path: '/metrics'
+      static_configs:
+        - targets: ['frontend.default:80']
+
+    - job_name: 'comparator'
+      metrics_path: '/metrics'
+      static_configs:
+        - targets: ['comparator.default:80']
+
+    - job_name: 'generator'
+      metrics_path: '/metrics'
+      static_configs:
+        - targets: ['generator.default:80']
+
