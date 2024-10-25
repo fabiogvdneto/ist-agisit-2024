@@ -1,5 +1,7 @@
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
+
 <a id="readme-top"></a>
+
 <!--
 *** Thanks for checking out the Best-README-Template. If you have a suggestion
 *** that would make this better, please fork the repo and create a pull request
@@ -23,8 +25,6 @@
     <br />
   </p>
 </div>
-
-
 
 <!-- TABLE OF CONTENTS -->
 <details>
@@ -50,9 +50,8 @@
   </ol>
 </details>
 
-
-
 <!-- ABOUT THE PROJECT -->
+
 ## About The Project
 
 ![Product Name Screen Shot][product-screenshot]
@@ -65,33 +64,31 @@ A demonstration of the system working is available on [YouTube](https://youtu.be
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
 ### Built With
 
 The web application was built with the following technologies.
 
-* [![Bun][Bun-img]][Bun-url]
-* [![Deno][Deno-img]][Deno-url] with [![Hono][Hono-img]][Hono-url]
-* [![Python][Python-img]][Python-url] with [![Django][Django-img]][Django-url]
-* [![Redis][Redis-img]][Redis-url]
+- [![Bun][Bun-img]][Bun-url]
+- [![Deno][Deno-img]][Deno-url] with [![Hono][Hono-img]][Hono-url]
+- [![Python][Python-img]][Python-url] with [![Django][Django-img]][Django-url]
+- [![Redis][Redis-img]][Redis-url]
 
 And the infrastructure was built on
-* [![Docker][Docker-img]][Docker-url]
-* [![Google Cloud][GCloud-img]][GCloud-url]
-* [![Grafana][Grafana-img]][Grafana-url]
-* [![Helm][Helm-img]][Helm-url]
-* [![Kubernetes][Kubernetes-img]][Kubernetes-url]
-* [![Prometheus][Prometheus-img]][Prometheus-url]
-* [![Terraform][Terraform-img]][Terraform-url]
+
+- [![Docker][Docker-img]][Docker-url]
+- [![Google Cloud][GCloud-img]][GCloud-url]
+- [![Grafana][Grafana-img]][Grafana-url]
+- [![Helm][Helm-img]][Helm-url]
+- [![Kubernetes][Kubernetes-img]][Kubernetes-url]
+- [![Prometheus][Prometheus-img]][Prometheus-url]
+- [![Terraform][Terraform-img]][Terraform-url]
 
 ![Architecture][architecture-img]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
 <!-- GETTING STARTED -->
+
 ## Getting Started
 
 This is an example of how you may give instructions on setting up your project locally.
@@ -99,12 +96,13 @@ To get a local copy up and running follow these simple example steps.
 
 Each microservice has a Dockerfile that can be used to run the microservice. App-level docker compose is also available to run the application locally.
 
-
 ### Deploying to GKE
+
 1. Get a [Service Account](https://console.cloud.google.com/iam-admin/serviceaccounts) from Google Cloud. It needs certain permissions for building the cluster. To be safe from further troubleshooting, you can make the service account and **Owner**.
 2. Put the _credentials_ in [infra/k8scloud/credentials.json](infra/k8scloud/credentials.json)
 
 #### GCR
+
 The project uses [Google Artifact Registry](https://gcr.io), so you have to authenticate on Docker and push the Docker images to it. You can read the documentation [here](https://cloud.google.com/artifact-registry/docs/docker/authentication#json-key).
 
 1. Authenticate docker. Considering _location_ being **europe-central2**: `cat credentials.json | docker login -u _json_key --password-stdin \
@@ -112,25 +110,28 @@ https://europe-central2-docker.pkg.dev`
 2. Build the images with `docker compose build`
 3. Use the [app/push-all.sh](app/push-all.sh) to help you tag and push the Docker images
 
-    You can use [app/push.sh](app/push.sh) to push a single image. It takes as argument the image name.
-
+   You can use [app/push.sh](app/push.sh) to push a single image. It takes as argument the image name.
 
 #### Terraform
+
 Go to [infra/k8scloud](infra/k8scloud/).
+
 1. Change [terraform variables](infra/k8scloud/terraform.tfvars) if needed
-2. Run `terraform init`. 
-    
-    You can use the Vagrantfile (`vagrant up` then `vragrant ssh`) to start a VM with the necessary dependencies or `nix develop` if on nixos
+2. Run `terraform init`.
+
+   You can use the Vagrantfile (`vagrant up` then `vragrant ssh`) to start a VM with the necessary dependencies or `nix develop` if on nixos
+
 3. Run `terraform apply` and wait for the cluster to create. Generally takes about 8 minutes
 4. Setup kubectl to use the created cluster by running [infra/k8scloud/scripts/connect.kubectl.sh](infra/k8scloud/scripts/connect.kubectl.sh)
 5. Get the _frontend_ service IP: `kubectl get services`. By placing it on your browser you can now use the application.
 
 If you wish to connect to Grafana to see the dashboards, you have to portforward.
-This can be achieved by running the [infra/k8scloud/scripts/grafana.sh](infra/k8scloud/scripts/grafana.sh) script. The same applies to Prometheus.
+This can be achieved by running the [infra/k8scloud/scripts/grafana.sh](infra/k8scloud/scripts/grafana.sh) script. The same applies to Prometheus. The default grafana credentials are `admin`:`prom-operator`. ⚠️ You have to portforward somewhere where you have access to a browser (i.e. your own computer or Vagrant running Docker).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTACT -->
+
 ## Contact
 
 - Fábio Neto - ist1104126 - fabiogvdneto@tecnico.ulisboa.pt
@@ -143,6 +144,7 @@ Project Link: [Gitlab@RNL/agisit/agisit24-g31](https://gitlab.rnl.tecnico.ulisbo
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
 [product-screenshot]: docs/app-screenshot.png
 [architecture-img]: docs/architecture.png
 [Bun-img]: https://img.shields.io/badge/Bun-000?logo=bun&logoColor=fff
